@@ -1,3 +1,3 @@
 export default function AdminDashboardPage() {
-  return <button>Admin Dashboard</button>;
+  return <button>Dashboard</button>;
 }
