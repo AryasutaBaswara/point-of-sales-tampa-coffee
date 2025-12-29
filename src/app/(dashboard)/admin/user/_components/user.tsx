@@ -6,6 +6,11 @@ import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import DataTable from "../../../../../components/common/data-table";
+import { HEADER_TABLE_USER } from "@/constants/user-constant";
+import { useMemo } from "react";
+import DropdownAction from "@/components/common/dropdown-action";
+import { Pencil, Trash, Trash2 } from "lucide-react";
 
 export default function UserManagement() {
   const supabase = createClient();
@@ -25,6 +30,41 @@ export default function UserManagement() {
       return data;
     },
   });
+
+  const filteredData = useMemo(() => {
+    return (users || []).map((user, index) => {
+      return [
+        index + 1,
+        user.id,
+        user.name,
+        user.role,
+        <DropdownAction
+          menu={[
+            {
+              label: (
+                <span className="flex items-center gap-2">
+                  <Pencil />
+                  Edit
+                </span>
+              ),
+              action: () => {},
+            },
+            {
+              label: (
+                <span className="flex items-center gap-2">
+                  <Trash2 className="text-red-400" />
+                  Delete
+                </span>
+              ),
+              variant: "destructive",
+              action: () => {},
+            },
+          ]}
+        />,
+      ];
+    });
+  }, [users]);
+
   return (
     <div className="w-full">
       <div className="flex flex-col lg:flex-row mb-4 gap-2 justify-between w-full">
@@ -38,13 +78,11 @@ export default function UserManagement() {
           </Dialog>
         </div>
       </div>
-
-      {users?.map((user) => (
-        <div key={user.id}>
-          <h2>{user.name}</h2>
-          <h2>{user.role}</h2>
-        </div>
-      ))}
+      <DataTable
+        header={HEADER_TABLE_USER}
+        data={filteredData}
+        isLoading={isLoading}
+      />
     </div>
   );
 }
