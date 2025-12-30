@@ -15,17 +15,23 @@ import useDataTable from "@/hooks/use-data-table";
 
 export default function UserManagement() {
   const supabase = createClient();
-  const { currentPage, handleChangePage, currentLimit, handleChangeLimit } =
-    useDataTable();
+  const {
+    currentPage,
+    handleChangePage,
+    currentLimit,
+    handleChangeLimit,
+    currentSearch,
+    handleChangeSearch,
+  } = useDataTable();
   const { data: users, isLoading } = useQuery({
-    queryKey: ["users", currentPage, currentLimit],
+    queryKey: ["users", currentPage, currentLimit, currentSearch],
     queryFn: async () => {
       const result = await supabase
         .from("profiles")
         .select("*", { count: "exact" })
         .range((currentPage - 1) * currentLimit, currentPage * currentLimit - 1)
-        .order("created_at");
-
+        .order("created_at")
+        .ilike("name", `%${currentSearch}%`);
       if (result.error)
         toast.error("Get User data failed", {
           description: result.error.message,
@@ -80,7 +86,10 @@ export default function UserManagement() {
       <div className="flex flex-col lg:flex-row mb-4 gap-2 justify-between w-full">
         <h1 className="text-2xl font-bold">User Management</h1>
         <div className="flex gap-2">
-          <Input placeholder="Search by name" />
+          <Input
+            placeholder="Search by name"
+            onChange={(e) => handleChangeSearch(e.target.value)}
+          />
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline">Create</Button>
