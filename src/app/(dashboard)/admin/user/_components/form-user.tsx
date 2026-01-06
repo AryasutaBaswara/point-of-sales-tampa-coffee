@@ -28,7 +28,7 @@ export default function FormUser<T extends FieldValues>({
   form: UseFormReturn<T>;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
-  type: "create" | "Update";
+  type: "Create" | "Update";
   preview?: Preview;
   setPreview?: (preview: Preview) => void;
 }) {
@@ -38,7 +38,7 @@ export default function FormUser<T extends FieldValues>({
         <DialogHeader>
           <DialogTitle>{type} User</DialogTitle>
           <DialogDescription>
-            {type === "create" ? "Create a new User" : "Update a User"}
+            {type === "Create" ? "Create a new User" : "Update a User"}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4">
@@ -48,7 +48,7 @@ export default function FormUser<T extends FieldValues>({
             label="Name"
             placeholder="Insert your name"
           />
-          {type === "create" && (
+          {type === "Create" && (
             <FormInput
               form={form}
               name={"email" as Path<T>}
@@ -70,7 +70,7 @@ export default function FormUser<T extends FieldValues>({
             label="Role"
             selectItem={ROLE_LIST}
           />
-          {type === "create" && (
+          {type === "Create" && (
             <FormInput
               form={form}
               name={"password" as Path<T>}

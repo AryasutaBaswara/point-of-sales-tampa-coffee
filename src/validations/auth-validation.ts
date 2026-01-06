@@ -16,5 +16,15 @@ export const createUserSchema = z.object({
   ]),
 });
 
+export const updateUserSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  role: z.string().min(1, "Role is required"),
+  avatar_url: z.union([
+    z.string().min(1, "Avatar URL is required"),
+    z.instanceof(File),
+  ]),
+});
+
 export type LoginForm = z.infer<typeof loginSchemaForm>;
 export type CreateUserForm = z.infer<typeof createUserSchema>;
+export type UpdateUserForm = z.infer<typeof updateUserSchema>;
