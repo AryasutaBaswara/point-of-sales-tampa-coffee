@@ -15,6 +15,7 @@ import { Menu } from "@/validations/menu-validation";
 import Image from "next/image";
 import { cn, convertIDR } from "@/lib/utils";
 import { HEADER_TABLE_MENU } from "@/constants/menu-constant";
+import DialogCreateMenu from "./dialog-create-menu";
 
 export default function MenuManagement() {
   const supabase = createClient();
@@ -65,6 +66,12 @@ export default function MenuManagement() {
     if (!open) setSelectedAction(null);
   };
 
+  const categoryStyles: Record<string, string> = {
+    mains: "bg-orange-100 text-orange-700 border-orange-200", // Warna oranye untuk makanan berat
+    beverages: "bg-blue-100 text-blue-700 border-blue-200", // Warna biru untuk minuman
+    desserts: "bg-pink-100 text-pink-700 border-pink-200", // Warna pink untuk manis
+  };
+
   const filteredData = useMemo(() => {
     return (menus?.data || []).map((menu: Menu, index) => {
       return [
@@ -79,15 +86,24 @@ export default function MenuManagement() {
           />
           {menu.name}
         </div>,
-        menu.category,
+        <div
+          className={cn(
+            "w-fit whitespace-nowrap px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize",
+            // Style warna kamu
+            categoryStyles[menu.category.toLowerCase()]
+          )}
+        >
+          {menu.category}
+        </div>,
         <div>
           <p>Base: {convertIDR(menu.price)}</p>
           <p>Discount: {menu.discount}</p>
           <p>
-            After Discount:
+            After Discount:{" "}
             {convertIDR(menu.price - (menu.price * menu.discount) / 100)}
           </p>
         </div>,
+
         <div
           className={cn(
             "px-2 py-1 rounded-full text-white w-fit",
@@ -149,6 +165,7 @@ export default function MenuManagement() {
             <DialogTrigger asChild>
               <Button variant="outline">Create</Button>
             </DialogTrigger>
+            <DialogCreateMenu refetch={refetch} />
           </Dialog>
         </div>
       </div>
