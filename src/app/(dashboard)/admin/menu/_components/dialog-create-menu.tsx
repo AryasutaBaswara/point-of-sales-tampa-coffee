@@ -7,6 +7,7 @@ import { Preview } from "@/types/general";
 import FormUser from "./form-menu";
 import { MenuForm, menuFormSchema } from "@/validations/menu-validation";
 import { INITIAL_MENU, INITIAL_STATE_MENU } from "@/constants/menu-constant";
+import FormMenu from "./form-menu";
 
 export default function DialogCreateMenu({ refetch }: { refetch: () => void }) {
   const form = useForm<MenuForm>({
@@ -46,7 +47,7 @@ export default function DialogCreateMenu({ refetch }: { refetch: () => void }) {
   }, [createMenuState]);
 
   return (
-    <FormUser
+    <FormMenu
       form={form}
       onSubmit={onSubmit}
       isLoading={isPendingCreateMenu}
