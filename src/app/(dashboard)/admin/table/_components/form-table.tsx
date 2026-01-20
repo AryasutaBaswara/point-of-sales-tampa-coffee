@@ -1,4 +1,3 @@
-import FormImage from "@/components/common/form-image";
 import FormInput from "@/components/common/form-input";
 import FormSelect from "@/components/common/form-select";
 import { Button } from "@/components/ui/button";
@@ -11,8 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { ROLE_LIST } from "@/constants/auth-constant";
-import { Preview } from "@/types/general";
+import { STATUS_TABLE_LIST } from "@/constants/table-constant";
 import { Loader2 } from "lucide-react";
 import { FormEvent } from "react";
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
@@ -46,23 +44,23 @@ export default function FormTable<T extends FieldValues>({
           />
           <FormInput
             form={form}
-            name={"name" as Path<T>}
+            name={"description" as Path<T>}
             label="Table Description"
             placeholder="Insert Description"
             type="textarea"
           />
           <FormInput
             form={form}
-            name={"name" as Path<T>}
-            label="Table Description"
-            placeholder="Insert Description"
+            name={"capacity" as Path<T>}
+            label="Capacity"
+            placeholder="Insert Capacity"
             type="number"
           />
           <FormSelect
             form={form}
-            name={"role" as Path<T>}
-            label="Role"
-            selectItem={ROLE_LIST}
+            name={"status" as Path<T>}
+            label="Status"
+            selectItem={STATUS_TABLE_LIST}
           />
           <DialogFooter>
             <DialogClose asChild>

@@ -6,20 +6,17 @@ import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import DataTable from "../../../../../components/common/data-table";
 import { useMemo, useState } from "react";
 import DropdownAction from "@/components/common/dropdown-action";
 import { Pencil, Trash2 } from "lucide-react";
 import useDataTable from "@/hooks/use-data-table";
-import { Profile } from "@/types/auth";
 import { Table } from "@/validations/table-validation";
 import { HEADER_TABLE_TABLE } from "@/constants/table-constant";
 import { cn } from "@/lib/utils";
-import DialogCreateTable from "./dialog-create-table";
-import DialogUpdateTable from "./dialog-update-table";
-import DialogDeleteTable from "./dialog-delete-table";
+import DataTable from "@/components/common/data-table";
+import { HEADER_TABLE_ORDER } from "@/constants/order-constant";
 
-export default function TableManagement() {
+export default function OrderManagement() {
   const supabase = createClient();
   const {
     currentPage,
@@ -30,28 +27,31 @@ export default function TableManagement() {
     handleChangeSearch,
   } = useDataTable();
   const {
-    data: tables,
+    data: orders,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["tables", currentPage, currentLimit, currentSearch],
+    queryKey: ["orders", currentPage, currentLimit, currentSearch],
     queryFn: async () => {
       const query = supabase
-        .from("tables")
-        .select("*", { count: "exact" })
+        .from("orders")
+        .select(
+          `id, order_id, customer_name, status, payment_url, tables (name, id)`,
+          { count: "exact" }
+        )
         .range((currentPage - 1) * currentLimit, currentPage * currentLimit - 1)
         .order("created_at");
 
       if (currentSearch) {
         query.or(
-          `name.ilike.%${currentSearch}%,capacity.ilike.%${currentSearch}%,status.ilike.%${currentSearch}%`
+          `order_id.ilike.%${currentSearch}%,customer_name.ilike.%${currentSearch}%`
         );
       }
 
       const result = await query;
 
       if (result.error)
-        toast.error("Get Table data failed", {
+        toast.error("Get Order data failed", {
           description: result.error.message,
         });
 
@@ -69,72 +69,42 @@ export default function TableManagement() {
   };
 
   const statusStyles: Record<string, string> = {
-    available: "bg-green-600 text-white",
+    settled: "bg-lime-600 text-white",
 
     // Amber memberikan kesan "Hati-hati" atau "Sudah di-booking"
-    reserved: "bg-amber-100 text-amber-700 border-amber-200",
+    process: "bg-sky-600 text-white",
+    reserved: "bg-amber-600 text-white",
 
     // Rose lebih lembut di mata daripada Red yang mencolok
-    unavailable: "bg-red-500 text-white",
+    canceled: "bg-red-500 text-white",
   };
 
   const filteredData = useMemo(() => {
-    return (tables?.data || []).map((table: Table, index) => {
+    return (orders?.data || []).map((order, index) => {
       return [
         currentLimit * (currentPage - 1) + index + 1,
-        <div>
-          <h4 className="font-bold">{table.name}</h4>
-          <p className="text-xs">{table.description}</p>
-        </div>,
-        table.capacity,
+        order.order_id,
+        order.customer_name,
+        (order.tables as unknown as { name: string }).name,
         <div
           className={cn(
             "w-fit whitespace-nowrap px-2 py-1 rounded-full text-xs font-medium border capitalize",
             // Style warna kamu
-            statusStyles[table.status.toLowerCase()]
+            statusStyles[order.status.toLowerCase()]
           )}
         >
-          {table.status}
+          {order.status}
         </div>,
-        <DropdownAction
-          menu={[
-            {
-              label: (
-                <span className="flex items-center gap-2">
-                  <Pencil />
-                  Edit
-                </span>
-              ),
-              action: () => {
-                setSelectedAction({ data: table, type: "update" });
-              },
-            },
-            {
-              label: (
-                <span className="flex items-center gap-2">
-                  <Trash2 className="text-red-400" />
-                  Delete
-                </span>
-              ),
-              variant: "destructive",
-              action: () => {
-                setSelectedAction({
-                  data: table,
-                  type: "delete",
-                });
-              },
-            },
-          ]}
-        />,
+        <DropdownAction menu={[]} />,
       ];
     });
-  }, [tables]);
+  }, [orders]);
 
   const totalPages = useMemo(() => {
-    return tables && tables.count !== null
-      ? Math.ceil(tables.count / currentLimit)
+    return orders && orders.count !== null
+      ? Math.ceil(orders.count / currentLimit)
       : 0;
-  }, [tables]);
+  }, [orders]);
 
   return (
     <div className="w-full">
@@ -149,12 +119,12 @@ export default function TableManagement() {
             <DialogTrigger asChild>
               <Button variant="outline">Create</Button>
             </DialogTrigger>
-            <DialogCreateTable refetch={refetch} />
+            {/* <DialogCreateTable refetch={refetch} /> */}
           </Dialog>
         </div>
       </div>
       <DataTable
-        header={HEADER_TABLE_TABLE}
+        header={HEADER_TABLE_ORDER}
         data={filteredData}
         isLoading={isLoading}
         totalPages={totalPages}
@@ -163,7 +133,7 @@ export default function TableManagement() {
         onChangePage={handleChangePage}
         onChangeLimit={handleChangeLimit}
       />
-      <DialogUpdateTable
+      {/* <DialogUpdateTable
         refetch={refetch}
         currentData={selectedAction?.data as Table}
         open={selectedAction?.type === "update"}
@@ -174,7 +144,7 @@ export default function TableManagement() {
         refetch={refetch}
         currentData={selectedAction?.data as Table}
         handleChangeAction={handleChangeAction}
-      />
+      /> */}
     </div>
   );
 }
