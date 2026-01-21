@@ -44,7 +44,7 @@ export default function TableManagement() {
 
       if (currentSearch) {
         query.or(
-          `name.ilike.%${currentSearch}%,capacity.ilike.%${currentSearch}%,status.ilike.%${currentSearch}%`
+          `name.ilike.%${currentSearch}%,capacity.ilike.%${currentSearch}%,status.ilike.%${currentSearch}%`,
         );
       }
 
@@ -72,7 +72,7 @@ export default function TableManagement() {
     available: "bg-green-600 text-white",
 
     // Amber memberikan kesan "Hati-hati" atau "Sudah di-booking"
-    reserved: "bg-amber-100 text-amber-700 border-amber-200",
+    reserved: "bg-yellow-600 text-white",
 
     // Rose lebih lembut di mata daripada Red yang mencolok
     unavailable: "bg-red-500 text-white",
@@ -91,7 +91,7 @@ export default function TableManagement() {
           className={cn(
             "w-fit whitespace-nowrap px-2 py-1 rounded-full text-xs font-medium border capitalize",
             // Style warna kamu
-            statusStyles[table.status.toLowerCase()]
+            statusStyles[table.status.toLowerCase()],
           )}
         >
           {table.status}

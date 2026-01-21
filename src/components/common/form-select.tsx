@@ -54,8 +54,11 @@ export default function FormSelect<T extends FieldValues>({
                     <SelectItem
                       key={item.label}
                       value={item.value}
-                      disabled={item.disabled}
-                      className="capitalize"
+                      className={cn(
+                        "capitalize",
+                        item.disabled &&
+                          "pointer-events-none opacity-50 text-muted-foreground focus:bg-transparent focus:text-muted-foreground",
+                      )}
                     >
                       {item.label}
                     </SelectItem>

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { TableForm, tableFormSchema } from "@/validations/table-validation";
 import { INITIAL_STATE_TABLE, INITIAL_TABLE } from "@/constants/table-constant";
 import FormTable from "./form-table";
-import { createTable } from "../action";
+import { createTable } from "../actions";
 
 export default function DialogCreateTable({
   refetch,

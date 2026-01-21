@@ -10,7 +10,7 @@ import {
 } from "@/validations/table-validation";
 import { INITIAL_STATE_TABLE } from "@/constants/table-constant";
 import FormMenu from "../../menu/_components/form-menu";
-import { updateTable } from "../action";
+import { updateTable } from "../actions";
 import FormTable from "./form-table";
 
 export default function DialogUpdateTable({

@@ -2,7 +2,7 @@ import DialogDelete from "@/components/common/dialog-delete";
 import { startTransition, useActionState, useEffect } from "react";
 import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
 import { toast } from "sonner";
-import { deleteTable } from "../action";
+import { deleteTable } from "../actions";
 import { Table } from "@/validations/table-validation";
 
 export default function DialogDeleteTable({
