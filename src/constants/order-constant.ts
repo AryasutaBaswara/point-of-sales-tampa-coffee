@@ -27,3 +27,11 @@ export const STATUS_CREATE_ORDER = [
   { label: "Reserved", value: "reserved" },
   { label: "Process", value: "process" },
 ];
+
+export const HEADER_TABLE_DETAIL_ORDER = [
+  "No",
+  "Menu",
+  "Total",
+  "Status",
+  "Action",
+];
