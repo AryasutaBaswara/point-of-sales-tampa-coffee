@@ -30,7 +30,7 @@ export async function createMenu(prevState: MenuFormState, formData: FormData) {
     const { errors, data } = await uploadFile(
       "images",
       "menus",
-      validatedFields.data.image_url
+      validatedFields.data.image_url,
     );
     if (errors) {
       return {
@@ -100,12 +100,12 @@ export async function updateMenu(prevState: MenuFormState, formData: FormData) {
   }
 
   if (validatedFields.data.image_url instanceof File) {
-    const oldAvatarUrl = formData.get("old_avatar_url") as string;
+    const oldImageUrl = formData.get("old_image_url") as string;
     const { errors, data } = await uploadFile(
       "images",
-      "users",
+      "menus",
       validatedFields.data.image_url,
-      oldAvatarUrl.split("/images/")[1]
+      oldImageUrl.split("/images/")[1],
     );
     if (errors) {
       return {
@@ -126,7 +126,7 @@ export async function updateMenu(prevState: MenuFormState, formData: FormData) {
     };
   }
 
-  const supabase = await createClient({});
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from("menus")
@@ -161,7 +161,7 @@ export async function deleteMenu(prevState: MenuFormState, formData: FormData) {
   const image = formData.get("image_url") as string;
   const { status, errors } = await deleteFile(
     "images",
-    image.split("/images/")[1]
+    image.split("/images/")[1],
   );
 
   if (status === "error") {

@@ -33,7 +33,10 @@ export default function DialogUpdateMenu({
     const formData = new FormData();
     if (currentData?.image_url !== data.image_url) {
       Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, key === "image_url" ? preview!.file ?? "" : value);
+        formData.append(
+          key,
+          key === "image_url" ? (preview!.file ?? "") : value,
+        );
       });
       formData.append("old_image_url", currentData?.image_url ?? "");
     } else {

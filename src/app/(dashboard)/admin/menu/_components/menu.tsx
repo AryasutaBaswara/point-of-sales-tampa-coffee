@@ -44,7 +44,7 @@ export default function MenuManagement() {
 
       if (currentSearch) {
         query.or(
-          `name.ilike.%${currentSearch}%,category.ilike.%${currentSearch}`
+          `name.ilike.%${currentSearch}%,category.ilike.%${currentSearch}`,
         );
       }
 
@@ -72,6 +72,7 @@ export default function MenuManagement() {
     mains: "bg-orange-100 text-orange-700 border-orange-200", // Warna oranye untuk makanan berat
     beverages: "bg-blue-100 text-blue-700 border-blue-200", // Warna biru untuk minuman
     desserts: "bg-pink-100 text-pink-700 border-pink-200", // Warna pink untuk manis
+    sides: "bg-green-100 text-green-700 border-green-200", // Warna hijau untuk sampingan
   };
 
   const filteredData = useMemo(() => {
@@ -92,7 +93,7 @@ export default function MenuManagement() {
           className={cn(
             "w-fit whitespace-nowrap px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize",
             // Style warna kamu
-            categoryStyles[menu.category.toLowerCase()]
+            categoryStyles[menu.category.toLowerCase()],
           )}
         >
           {menu.category}
@@ -109,7 +110,7 @@ export default function MenuManagement() {
         <div
           className={cn(
             "px-2 py-1 rounded-full text-white w-fit",
-            menu.is_available ? "bg-green-600" : "bg-red-500"
+            menu.is_available ? "bg-green-600" : "bg-red-500",
           )}
         >
           {menu.is_available ? "Available" : "Not Available"}

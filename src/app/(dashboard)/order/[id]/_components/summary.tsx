@@ -53,19 +53,23 @@ export default function Summary({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Total Price</span>
-              <span className="font-sm">{convertIDR(totalPrice)}</span>
+              <span className="text-muted-foreground">
+                {convertIDR(totalPrice)}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Tax</span>
-              <span className="font-sm">{convertIDR(tax)}</span>
+              <span className="text-muted-foreground">{convertIDR(tax)}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Service Fee</span>
-              <span className="font-sm">{convertIDR(service)}</span>
+              <span className="text-muted-foreground">
+                {convertIDR(service)}
+              </span>
             </div>
           </div>
           <div className="flex items-center justify-between pt-2">
-            <span className="text-base font-bold">Grand Total</span>
+            <span className="text-base font-bold">Total</span>
             <span className="text-lg font-bold text-primary">
               {convertIDR(grandTotal)}
             </span>
