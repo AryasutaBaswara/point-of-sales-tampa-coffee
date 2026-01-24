@@ -58,11 +58,11 @@ export default function Summary({
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Tax</span>
+              <span className="text-muted-foreground">Tax (10%)</span>
               <span className="text-muted-foreground">{convertIDR(tax)}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Service Fee</span>
+              <span className="text-muted-foreground">Service Fee (5%)</span>
               <span className="text-muted-foreground">
                 {convertIDR(service)}
               </span>
