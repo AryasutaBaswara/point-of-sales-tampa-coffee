@@ -43,3 +43,10 @@ export const FILTER_MENU = [
   { label: "Beverages", value: "beverages" },
   { label: "Desserts", value: "desserts" },
 ];
+
+export const INTIAL_STATE_GENERATE_PAYMENT = {
+  ...INITIAL_STATE_ORDER,
+  data: {
+    payment_token: "",
+  },
+};

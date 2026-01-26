@@ -2,8 +2,12 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { FormState } from "@/types/general";
-import { OrderFormState } from "@/types/order";
+import { Cart, OrderFormState } from "@/types/order";
 import { orderFormSchema } from "@/validations/order-validation";
+import { redirect } from "next/navigation";
+import midtrans from "midtrans-client";
+import { environment } from "@/configs/environment";
+
 export async function createOrder(
   prevState: OrderFormState,
   formData: FormData,
@@ -108,4 +112,94 @@ export async function updateReservation(
   return {
     status: "success",
   };
+}
+
+export async function addOrderItem(
+  prevState: OrderFormState,
+  data: {
+    order_id: string;
+    items: Cart[];
+  },
+) {
+  const supabase = await createClient();
+
+  const payload = data.items.map(({ total, menu, ...item }) => item);
+
+  const { error } = await supabase.from("orders_menus").insert(payload);
+
+  if (error) {
+    return {
+      status: "error",
+      errors: {
+        ...prevState.errors,
+        _form: [],
+      },
+    };
+  }
+
+  redirect(`/order/${data.order_id}`);
+}
+
+export async function upadateStatusOrderItem(
+  prevState: FormState,
+  formData: FormData,
+) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("orders_menus")
+    .update({
+      status: formData.get("status"),
+    })
+    .eq("id", formData.get("id"));
+
+  if (error) {
+    return {
+      status: "error",
+      errors: {
+        ...prevState.errors,
+        _form: [],
+      },
+    };
+  }
+
+  return {
+    status: "success",
+  };
+}
+
+export async function generatePayment(
+  prevState: FormState,
+  formData: FormData,
+) {
+  const supabase = await createClient();
+  const orderId = formData.get("id");
+  const grossAmount = formData.get("gross_amount");
+  const customerName = formData.get("customer_name");
+
+  const snap = new midtrans.Snap({
+    isProduction: false,
+    serverKey: environment.MIDTRANS_SERVER_KEY!,
+  });
+
+  const parameter = {
+    transaction_details: {
+      order_id: `${orderId}`,
+      grossAmount: parseFloat(grossAmount as string),
+    },
+    customer_details: {
+      first_name: customerName,
+    },
+  };
+
+  const result = await snap.createTransaction(parameter);
+
+  if (result.error_messages) {
+    return {
+      status: "error",
+      errors: {
+        ...prevState.errors,
+        _form: [result.error_messages],
+      },
+    };
+  }
 }
