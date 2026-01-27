@@ -3,8 +3,14 @@ import DetailOrder from "./_components/detail-order";
 import { environment } from "@/configs/environment";
 
 export const metadata = {
-  title: "TAMPA Coffee | Order Management",
+  title: "TAMPA Coffee | Detail Order",
 };
+
+declare global {
+  interface Window {
+    snap: any;
+  }
+}
 
 export default async function DetailOrderPage({
   params,

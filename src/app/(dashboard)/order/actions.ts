@@ -184,7 +184,7 @@ export async function generatePayment(
   const parameter = {
     transaction_details: {
       order_id: `${orderId}`,
-      grossAmount: parseFloat(grossAmount as string),
+      gross_amount: parseFloat(grossAmount as string),
     },
     customer_details: {
       first_name: customerName,
@@ -200,6 +200,21 @@ export async function generatePayment(
         ...prevState.errors,
         _form: [result.error_messages],
       },
+      data: {
+        payment_token: "",
+      },
     };
   }
+
+  await supabase
+    .from("orders")
+    .update({ payment_token: result.token })
+    .eq("order_id", orderId);
+
+  return {
+    status: "success",
+    data: {
+      payment_token: `${result.token}`,
+    },
+  };
 }

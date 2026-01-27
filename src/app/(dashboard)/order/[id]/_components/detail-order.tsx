@@ -203,7 +203,7 @@ export default function DetailOrder({ id }: { id: string }) {
         </div>
         <div className="lg:w-1/3">
           {order && (
-            <Summary order={order} OrderMenu={orderMenu?.data || []} id={id} />
+            <Summary order={order} orderMenu={orderMenu?.data || []} id={id} />
           )}
         </div>
       </div>
