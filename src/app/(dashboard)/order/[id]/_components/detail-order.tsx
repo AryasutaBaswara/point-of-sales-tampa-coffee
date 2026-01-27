@@ -21,6 +21,7 @@ import {
 import { EllipsisVertical } from "lucide-react";
 import { upadateStatusOrderItem } from "../../actions";
 import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function DetailOrder({ id }: { id: string }) {
   const supabase = createClient();
@@ -180,13 +181,19 @@ export default function DetailOrder({ id }: { id: string }) {
       : 0;
   }, [orderMenu]);
 
+  const profile = useAuthStore((state) => state.profile);
+
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between w-full gap-4">
         <h1 className="text-2xl font-bold">Detail Order</h1>
-        <Link href={`/order/${id}/add`}>
-          <Button>Add Order Item</Button>
-        </Link>
+        {profile.role !== "kitchen" &&
+          order?.status !== "settled" &&
+          order?.status !== "canceled" && (
+            <Link href={`/order/${id}/add`}>
+              <Button>Add Order Item</Button>
+            </Link>
+          )}
       </div>
       <div className="flex flex-col lg:flex-row gap-4 w-full">
         <div className="lg:w-2/3">

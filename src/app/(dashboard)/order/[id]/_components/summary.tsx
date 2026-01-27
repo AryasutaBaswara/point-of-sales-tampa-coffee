@@ -11,6 +11,7 @@ import { INITIAL_STATE_GENERATE_PAYMENT } from "@/constants/order-constant";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function Summary({
   order,
@@ -63,6 +64,8 @@ export default function Summary({
     }
   }, [generatePaymentState]);
 
+  const profile = useAuthStore((state) => state.profile);
+
   return (
     <Card className="w-full shadow-sm">
       <CardContent className="space-y-4">
@@ -112,7 +115,7 @@ export default function Summary({
               {convertIDR(grandTotal)}
             </span>
           </div>
-          {order?.status === "process" && (
+          {order?.status === "process" && profile.role !== "kitchen" && (
             <Button
               type="submit"
               onClick={handleGeneratePayment}

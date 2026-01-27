@@ -12,7 +12,9 @@ export default function Home() {
   return (
     <div className="bg-muted flex flex-col justify-center items-center h-screen space-y-4">
       <h1 className="text-4xl font-semibold">Welcome {profile.name}</h1>
-      <Link href="/admin">
+      <Link
+        href={profile.role !== "kitchen" || "cashier" ? "/order" : "/admin"}
+      >
         <Button className="bg-teal-500 text-white">Access Dashboard</Button>
       </Link>
     </div>
