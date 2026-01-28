@@ -25,10 +25,8 @@ import { Loader2 } from "lucide-react";
 import FormSelect from "@/components/common/form-select";
 
 export default function DialogCreateOrder({
-  refetch,
   tables,
 }: {
-  refetch: () => void;
   tables: Table[] | undefined | null;
 }) {
   const form = useForm<OrderForm>({
@@ -61,7 +59,6 @@ export default function DialogCreateOrder({
       toast.success("Create Order Success");
       form.reset();
       document.querySelector<HTMLButtonElement>('[data-state="open"]')?.click();
-      refetch();
     }
   }, [createOrderState]);
 

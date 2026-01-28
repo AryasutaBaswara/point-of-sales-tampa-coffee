@@ -46,7 +46,7 @@ export default function OrderManagement() {
   const {
     data: orders,
     isLoading,
-    refetch,
+    refetch: refetchOrders,
   } = useQuery({
     queryKey: ["orders", currentPage, currentLimit, currentSearch],
     queryFn: async () => {
@@ -90,6 +90,28 @@ export default function OrderManagement() {
       return result.data;
     },
   });
+
+  useEffect(() => {
+    const channel = supabase
+      .channel(`realtime-order`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "orders",
+        },
+        () => {
+          refetchOrders();
+          refetchTables();
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const [selectedAction, setSelectedAction] = useState<{
     data: Table;
@@ -142,7 +164,7 @@ export default function OrderManagement() {
 
     if (reservedState?.status === "success") {
       toast.success("Update Reservation Success");
-      refetch();
+      refetchOrders();
     }
   }, [reservedState]);
 
@@ -233,7 +255,7 @@ export default function OrderManagement() {
               <DialogTrigger asChild>
                 <Button variant="outline">Create</Button>
               </DialogTrigger>
-              <DialogCreateOrder tables={tables} refetch={refetch} />
+              <DialogCreateOrder tables={tables} />
             </Dialog>
           )}
         </div>

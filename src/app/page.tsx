@@ -15,7 +15,9 @@ export default function Home() {
       <Link
         href={profile.role !== "kitchen" || "cashier" ? "/order" : "/admin"}
       >
-        <Button className="bg-teal-500 text-white">Access Dashboard</Button>
+        <Button className="bg-teal-500 hover:bg-teal-600 text-white">
+          Access Dashboard
+        </Button>
       </Link>
     </div>
   );
