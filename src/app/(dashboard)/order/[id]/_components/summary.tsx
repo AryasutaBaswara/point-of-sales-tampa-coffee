@@ -115,20 +115,22 @@ export default function Summary({
               {convertIDR(grandTotal)}
             </span>
           </div>
-          {order?.status === "process" && profile.role !== "kitchen" && (
-            <Button
-              type="submit"
-              onClick={handleGeneratePayment}
-              disabled={!isAllServed || isPendingGeneratePayment}
-              className="w-full font-semibold bg-teal-500 hover:bg-teal-600 text-light cursor-pointer"
-            >
-              {isPendingGeneratePayment ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                "Pay sire"
-              )}
-            </Button>
-          )}
+          {order?.status === "process" &&
+            profile.role !== "kitchen" &&
+            orderMenu.length > 0 && (
+              <Button
+                type="submit"
+                onClick={handleGeneratePayment}
+                disabled={!isAllServed || isPendingGeneratePayment}
+                className="w-full font-semibold bg-teal-500 hover:bg-teal-600 text-light cursor-pointer"
+              >
+                {isPendingGeneratePayment ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  "Pay sire"
+                )}
+              </Button>
+            )}
         </div>
       </CardContent>
     </Card>

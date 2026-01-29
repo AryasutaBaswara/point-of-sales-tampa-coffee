@@ -7,6 +7,7 @@ import { orderFormSchema } from "@/validations/order-validation";
 import { redirect } from "next/navigation";
 import midtrans from "midtrans-client";
 import { environment } from "@/configs/environment";
+import { revalidatePath } from "next/cache";
 
 export async function createOrder(
   prevState: OrderFormState,
@@ -136,6 +137,8 @@ export async function addOrderItem(
       },
     };
   }
+
+  revalidatePath(`/order/${data.order_id}`);
 
   redirect(`/order/${data.order_id}`);
 }
