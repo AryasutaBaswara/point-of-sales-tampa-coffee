@@ -12,6 +12,9 @@ export default function CardMenu({
   menu: Menu;
   onAddToCart: (item: Menu, action: "decrement" | "increment") => void;
 }) {
+  const isDev = process.env.NODE_ENV === "development";
+  const isProd = process.env.NODE_ENV === "production";
+
   return (
     <Card key={menu.id} className="w-full h-fit birder shadow-sm p-0 gap-0">
       <Image
@@ -20,6 +23,7 @@ export default function CardMenu({
         width={400}
         height={400}
         className="w-full object-cover rounded-t-lg"
+        unoptimized={isDev}
       />
       <CardContent className="px-4 py-2 space-y-1">
         <h3 className="text-lg font-semibold">{menu.name}</h3>

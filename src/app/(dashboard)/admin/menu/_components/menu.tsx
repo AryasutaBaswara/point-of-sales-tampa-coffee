@@ -75,6 +75,9 @@ export default function MenuManagement() {
     sides: "bg-green-100 text-green-700 border-green-200", // Warna hijau untuk sampingan
   };
 
+  const isDev = process.env.NODE_ENV === "development";
+  const isProd = process.env.NODE_ENV === "production";
+
   const filteredData = useMemo(() => {
     return (menus?.data || []).map((menu: Menu, index) => {
       return [
@@ -86,6 +89,7 @@ export default function MenuManagement() {
             width={40}
             height={40}
             className="rounded"
+            unoptimized={isDev}
           />
           {menu.name}
         </div>,

@@ -47,6 +47,9 @@ export default function CartSection({
     );
   };
 
+  const isDev = process.env.NODE_ENV === "development";
+  const isProd = process.env.NODE_ENV === "production";
+
   return (
     <Card className="w-full shadow-sm">
       <CardContent className="space-y-4">
@@ -80,6 +83,7 @@ export default function CartSection({
                       width={40}
                       height={40}
                       className="rounded"
+                      unoptimized={isDev}
                     />
                     <div>
                       <p className="text-sm">{item.menu.name}</p>

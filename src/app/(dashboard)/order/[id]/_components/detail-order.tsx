@@ -125,6 +125,9 @@ export default function DetailOrder({ id }: { id: string }) {
     }
   }, [updateStatusOrderState]);
 
+  const isDev = process.env.NODE_ENV === "development";
+  const isProd = process.env.NODE_ENV === "production";
+
   const filteredData = useMemo(() => {
     return (orderMenu?.data || []).map((item, index) => {
       return [
@@ -136,6 +139,7 @@ export default function DetailOrder({ id }: { id: string }) {
             width={60}
             height={60}
             className="rounded"
+            unoptimized={isDev}
           />
           <div className="flex flex-col">
             {item.menus.name} x {item.quantity}
