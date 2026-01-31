@@ -22,6 +22,7 @@ import { EllipsisVertical } from "lucide-react";
 import { upadateStatusOrderItem } from "../../actions";
 import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
 import { useAuthStore } from "@/stores/auth-store";
+import Receipt from "./receipt";
 
 export default function DetailOrder({ id }: { id: string }) {
   const supabase = createClientSupabase();
@@ -33,7 +34,9 @@ export default function DetailOrder({ id }: { id: string }) {
     queryFn: async () => {
       const result = await supabase
         .from("orders")
-        .select("id, customer_name, status, payment_token, tables (name, id)")
+        .select(
+          "id, customer_name, status, payment_token, tables (name, id), created_at",
+        )
         .eq("order_id", id)
         .single();
 
@@ -221,6 +224,9 @@ export default function DetailOrder({ id }: { id: string }) {
               <Button>Add Order Item</Button>
             </Link>
           )}
+        {order?.status === "settled" && (
+          <Receipt order={order} orderMenu={orderMenu?.data} orderId={id} />
+        )}
       </div>
       <div className="flex flex-col lg:flex-row gap-4 w-full">
         <div className="lg:w-2/3">
