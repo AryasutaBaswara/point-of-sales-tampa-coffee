@@ -1,6 +1,7 @@
 "use client";
 
 import LineCharts from "@/components/common/line-chart";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -11,6 +12,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { convertIDR } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 
 export default function Dashboard() {
   const supabase = createClient();
@@ -270,6 +272,9 @@ export default function Dashboard() {
                 <th className="px-6 py-3 text-left font-semibold text-foreground">
                   Status
                 </th>
+                <th className="px-6 py-3 text-left font-semibold text-foreground">
+                  Detail
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -279,10 +284,10 @@ export default function Dashboard() {
                     key={order.id}
                     className="border-b hover:bg-muted/30 transition-colors duration-200"
                   >
-                    <td className="px-6 py-4 font-medium text-foreground">
+                    <td className="px-6 py-4 text-muted-foreground">
                       {order.order_id}
                     </td>
-                    <td className="px-6 py-4 text-muted-foreground">
+                    <td className="px-6 py-4 font-medium text-foreground">
                       {order.customer_name}
                     </td>
                     <td className="px-6 py-4 text-muted-foreground">
@@ -292,6 +297,14 @@ export default function Dashboard() {
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
                         {order.status}
                       </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <Link
+                        href={`/order/${order.order_id}`}
+                        className="hover:text-gray-300 transition duration-500"
+                      >
+                        Click Here
+                      </Link>
                     </td>
                   </tr>
                 ))
