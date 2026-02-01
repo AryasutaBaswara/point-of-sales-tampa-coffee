@@ -81,8 +81,8 @@ export default function Dashboard() {
     queryFn: async () => {
       const { data } = await supabase
         .from("orders_menus")
-        .select("quantity, menus (price), orders(created_at)")
-        .gte("orders.created_at", startOfMonth.toISOString());
+        .select("nominal, orders(status)")
+        .gte("created_at", startOfMonth.toISOString());
 
       return data ?? [];
     },
@@ -90,9 +90,7 @@ export default function Dashboard() {
 
   let subtotal = 0;
   (monthlyRevenue || []).forEach((item) => {
-    const prc = (item.menus as unknown as { price: number }).price || 0;
-    const qty = item?.quantity || 0;
-    subtotal += prc * qty;
+    subtotal += item.nominal;
   });
 
   const tax = subtotal * 0.1;
@@ -130,9 +128,9 @@ export default function Dashboard() {
     queryFn: async () => {
       const { data } = await supabase
         .from("orders_menus")
-        .select("quantity, menus (price)")
-        .gte("orders_menus.created_at", startOfLastMonth.toISOString())
-        .lte("orders_menus.created_at", endOfLastMonth.toISOString());
+        .select("nominal")
+        .gte("created_at", startOfLastMonth.toISOString())
+        .lte("created_at", endOfLastMonth.toISOString());
 
       return data ?? [];
     },
@@ -140,9 +138,7 @@ export default function Dashboard() {
 
   let totalLastMonth = 0;
   (lastMonthRevenue || []).forEach((item) => {
-    const prc = (item.menus as unknown as { price: number }).price || 0;
-    const qty = item?.quantity || 0;
-    totalLastMonth += prc * qty;
+    totalLastMonth += item.nominal;
   });
 
   const LMtax = totalLastMonth * 0.1;
@@ -211,7 +207,9 @@ export default function Dashboard() {
         <Card>
           <CardHeader>
             <CardDescription>Growth Rate</CardDescription>
-            <CardTitle className="text-2xl font-bold">{growthRate}</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              {growthRate.toFixed(2)}
+            </CardTitle>
           </CardHeader>
           <CardFooter>
             <div className="text-muted-foreground text-sm">
@@ -281,26 +279,27 @@ export default function Dashboard() {
               {lastOrder && lastOrder.length > 0 ? (
                 lastOrder?.map((order) => (
                   <tr
-                    key={order.id}
+                    key={order?.id}
                     className="border-b hover:bg-muted/30 transition-colors duration-200"
                   >
                     <td className="px-6 py-4 text-muted-foreground">
-                      {order.order_id}
+                      {order?.order_id}
                     </td>
                     <td className="px-6 py-4 font-medium text-foreground">
-                      {order.customer_name}
+                      {order?.customer_name}
                     </td>
                     <td className="px-6 py-4 text-muted-foreground">
-                      {(order.tables as unknown as { name: string }).name}
+                      {(order?.tables as unknown as { name: string })?.name ||
+                        "Takeaway"}
                     </td>
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
-                        {order.status}
+                        {order?.status}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <Link
-                        href={`/order/${order.order_id}`}
+                        href={`/order/${order?.order_id}`}
                         className="hover:text-gray-300 transition duration-500"
                       >
                         Click Here

@@ -6,7 +6,7 @@ import { tableSchema } from "@/validations/table-validation";
 
 export async function createTable(
   prevState: TableFormState,
-  formData: FormData
+  formData: FormData,
 ) {
   const validatedFields = tableSchema.safeParse({
     name: formData.get("name"),
@@ -51,7 +51,7 @@ export async function createTable(
 
 export async function updateTable(
   prevState: TableFormState,
-  formData: FormData
+  formData: FormData,
 ) {
   const validatedFields = tableSchema.safeParse({
     name: formData.get("name"),
@@ -79,6 +79,8 @@ export async function updateTable(
       description: validatedFields.data.description,
       capacity: validatedFields.data.capacity,
       status: validatedFields.data.status,
+      position_x: 0,
+      position_y: 0,
     })
     .eq("id", formData.get("id"));
 
@@ -99,7 +101,7 @@ export async function updateTable(
 
 export async function deleteTable(
   prevState: TableFormState,
-  formData: FormData
+  formData: FormData,
 ) {
   const supabase = await createClient({ isAdmin: true });
 

@@ -27,7 +27,7 @@ export default function Success() {
 
       console.log(data);
 
-      if (data) {
+      if (data && data.table_id) {
         await supabase
           .from("tables")
           .update({

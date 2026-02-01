@@ -20,6 +20,7 @@ const Receipt = ({
     | {
         menus: Menu;
         quantity: number;
+        nominal: number;
         status: string;
         id: string;
       }[]
@@ -67,9 +68,7 @@ const Receipt = ({
                 <div className="bold">{item.menus.name}</div>
                 <div className="small">x {item.quantity}</div>
               </div>
-              <div className="w-1/3 right">
-                {convertIDR(item.menus.price * item.quantity)}
-              </div>
+              <div className="w-1/3 right">{convertIDR(item.nominal)}</div>
             </div>
           ))}
         </div>

@@ -3,7 +3,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { FormState } from "@/types/general";
 import { Cart, OrderFormState } from "@/types/order";
-import { orderFormSchema } from "@/validations/order-validation";
+import {
+  orderFormSchema,
+  orderTakeawayFormSchema,
+} from "@/validations/order-validation";
 import { redirect } from "next/navigation";
 import midtrans from "midtrans-client";
 import { environment } from "@/configs/environment";
@@ -72,6 +75,49 @@ export async function createOrder(
   };
 }
 
+export async function createOrderTakeaway(
+  prevState: OrderFormState,
+  formData: FormData,
+) {
+  const validatedFields = orderTakeawayFormSchema.safeParse({
+    customer_name: formData.get("customer_name"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      status: "error",
+      errors: {
+        ...validatedFields.error.flatten().fieldErrors,
+        _form: [],
+      },
+    };
+  }
+
+  const supabase = await createClient();
+
+  const orderId = `TAMPACF-${Date.now()}`;
+
+  const { error } = await supabase.from("orders").insert({
+    order_id: orderId,
+    customer_name: validatedFields.data.customer_name,
+    status: "process",
+  });
+
+  if (error) {
+    return {
+      status: "error",
+      errors: {
+        ...prevState.errors,
+        _form: [error.message],
+      },
+    };
+  }
+
+  return {
+    status: "success",
+  };
+}
+
 export async function updateReservation(
   prevState: FormState,
   formData: FormData,
@@ -124,7 +170,7 @@ export async function addOrderItem(
 ) {
   const supabase = await createClient();
 
-  const payload = data.items.map(({ total, menu, ...item }) => item);
+  const payload = data.items.map(({ menu, ...item }) => item);
 
   const { error } = await supabase.from("orders_menus").insert(payload);
 

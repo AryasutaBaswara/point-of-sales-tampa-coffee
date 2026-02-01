@@ -6,6 +6,7 @@ export function usePricing(
     | {
         menus: Menu;
         quantity: number;
+        nominal: number;
       }[]
     | null
     | undefined,
@@ -13,7 +14,7 @@ export function usePricing(
   const totalPrice = useMemo(() => {
     let total = 0;
     orderMenu?.forEach((item) => {
-      total += item.menus.price * item.quantity;
+      total += item.nominal;
     });
     return total;
   }, [orderMenu]);
