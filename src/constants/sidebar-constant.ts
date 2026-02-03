@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   SquareMenu,
   Users,
+  Citrus,
 } from "lucide-react";
 
 export const SIDEBAR_MENU_LIST = {
@@ -32,6 +33,11 @@ export const SIDEBAR_MENU_LIST = {
       title: "User",
       url: "/admin/user",
       icon: Users,
+    },
+    {
+      title: "Salem",
+      url: "/admin/salem",
+      icon: Citrus,
     },
   ],
   cashier: [
